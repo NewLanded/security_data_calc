@@ -5,6 +5,8 @@ from logging import handlers
 
 import schedule
 
+from source.interface import fluctuation_tactics_1
+
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter(
@@ -18,12 +20,12 @@ logger.addHandler(rf)
 
 
 def job1():
-    logger.info('starting pass')
+    logger.info('starting fluctuation_tactics_1')
     try:
-        pass
+        fluctuation_tactics_1.start()
     except Exception as e:
-        logger.error('error pass, {0}'.format(str(e)))
-    logger.info('finished pass')
+        logger.error('error fluctuation_tactics_1, error = {0}'.format(str(e)))
+    logger.info('finished fluctuation_tactics_1')
 
 
 def job1_task():
@@ -31,7 +33,7 @@ def job1_task():
 
 
 def run():
-    schedule.every().day.at("1:00").do(job1_task)
+    schedule.every().day.at("5:30").do(job1_task)
 
 
 if __name__ == "__main__":
