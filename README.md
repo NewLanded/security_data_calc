@@ -5,6 +5,7 @@ pip install:
     schedule  # apache-airflow 1.10有bug, 暂时用schedule,  apache-airflow  # export SLUGIFY_USES_TEXT_UNIDECODE=yes
     pandas
     mysql-connector  # 速度不如mysqlclient, 但依赖少, 安装简单
+    sqlalchemy
     # mysqlclient  # mysqlclient  # sudo ln -s /usr/lib64/libmariadbclient.a /usr/lib64/libmariadb.a  # https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient
 
 
