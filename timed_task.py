@@ -33,7 +33,7 @@ def job1_task():
 
 
 def run():
-    schedule.every().day.at("5:30").do(job1_task)
+    schedule.every().day.at("1:00").do(job1_task)
 
 
 if __name__ == "__main__":

@@ -67,6 +67,12 @@ def get_single_row(session, sql, args=None):
     return result
 
 
+def get_single_value(session, sql, args=None):
+    result = get_multi_data(session, sql, args)
+    result = None if not result else result[0][0]
+    return result
+
+
 def get_boolean_value(session, sql, args=None):
     result = get_multi_data(session, sql, args)
     if len(result) > 0 and result[0][0] == 1:
