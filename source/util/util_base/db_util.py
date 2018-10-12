@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 
 from source.conf import DB_CONNECT
 
-engine = create_engine(DB_CONNECT, echo=False)
+engine = create_engine(DB_CONNECT, echo=False, pool_recycle=3600)
 DBSession = sessionmaker(bind=engine)
 
 
