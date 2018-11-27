@@ -16,25 +16,25 @@ from source.util.util_data.security_data import SecurityData
 
 
 def calc_point_data(security_point_data):
-    date_pct_change_list = [[trade_date, value["pct_change"]] for trade_date, value in security_point_data.items()]
-    date_pct_change_list.sort(key=lambda x: x[0])
-    pct_change_list = [i[1] for i in date_pct_change_list]
+    date_pct_chg_list = [[trade_date, value["pct_chg"]] for trade_date, value in security_point_data.items()]
+    date_pct_chg_list.sort(key=lambda x: x[0])
+    pct_chg_list = [i[1] for i in date_pct_chg_list]
 
     raise_percent_list, raise_list, daily_limit = [], [], []
-    for pct_change in pct_change_list:
-        if pct_change > 0:
-            raise_list.append(pct_change)
+    for pct_chg in pct_chg_list:
+        if pct_chg > 0:
+            raise_list.append(pct_chg)
 
-        if pct_change > 0.015:
-            raise_percent_list.append(pct_change)
+        if pct_chg > 0.015:
+            raise_percent_list.append(pct_chg)
 
-        if pct_change >= 0.08:
-            daily_limit.append(pct_change)
+        if pct_chg >= 0.08:
+            daily_limit.append(pct_chg)
 
     b_point, s_point, quantity = 0, 0, 0
-    last_days_sum_pct_change = sum(pct_change_list[-5:])
-    if len(raise_list) / len(pct_change_list) > 0.4 and len(raise_percent_list) / len(pct_change_list) > 0.2 and not daily_limit \
-            and last_days_sum_pct_change < 0:
+    last_days_sum_pct_chg = sum(pct_chg_list[-5:])
+    if len(raise_list) / len(pct_chg_list) > 0.4 and len(raise_percent_list) / len(pct_chg_list) > 0.2 and not daily_limit \
+            and last_days_sum_pct_chg < 0:
         pass_flag = True
     else:
         pass_flag = False

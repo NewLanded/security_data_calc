@@ -12,14 +12,14 @@ class SecurityData:
 
     def get_security_point_data(self, ts_code, start_date, end_date):
         sql = """
-        select ts_code, trade_date, `open`, high, low, `close`, pre_close, `change`, pct_change, vol, amount from security_point_data 
+        select ts_code, trade_date, `open`, high, low, `close`, pre_close, `change`, pct_chg, vol, amount from security_point_data 
         where ts_code = :ts_code and trade_date between :start_date and :end_date
         """
         args = {"ts_code": ts_code, "start_date": start_date, "end_date": end_date}
         result = get_multi_data(self._session, sql, args)
 
         security_point_data = {}
-        for ts_code, trade_date, open_point, high, low, close, pre_close, change, pct_change, vol, amount in result:
+        for ts_code, trade_date, open_point, high, low, close, pre_close, change, pct_chg, vol, amount in result:
             security_point_data[trade_date] = {
                 "open": open_point,
                 "high": high,
@@ -27,7 +27,7 @@ class SecurityData:
                 "close": close,
                 "pre_close": pre_close,
                 "change": change,
-                "pct_change": pct_change / 100,
+                "pct_chg": pct_chg / 100,
                 "vol": vol,
                 "amount": amount,
             }
