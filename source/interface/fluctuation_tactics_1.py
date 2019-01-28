@@ -1,6 +1,6 @@
 import datetime
 
-from source.util.util_data.Security import Security
+from source.util.util_data.security import Security
 from source.util.util_data.date import Date
 from source.util.util_data.dml import Dml
 from source.util.util_data.result import Result
@@ -56,7 +56,7 @@ def start(date_now=None):
 
                 if pass_flag is True:
                     code_info = Security().get_code_info_by_ts_code(ts_code)
-                    Result().insert_result_data(code_info["code"], b_point, s_point, quantity, tactics_code="fluctuation_tactics_1", forecast_date=date_now)
+                    Result().insert_result_data(code_info["code"], 'b', b_point, s_point, quantity, tactics_code="fluctuation_tactics_1", forecast_date=date_now)
             except Exception as e:
                 Dml().store_failed_message(ts_code, "fluctuation_tactics_1", str(e), date_now)
 
