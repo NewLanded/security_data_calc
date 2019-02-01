@@ -1,6 +1,6 @@
 import datetime
 
-from source.module_struct.base_class import BSBase
+from source.module_struct.base_class import BSBaseOneSell
 from source.util.util_data.date import Date
 from source.util.util_data.dml import Dml
 from source.util.util_data.security import Security
@@ -15,9 +15,9 @@ from source.util.util_data.security_data import SecurityData
 """
 
 
-class BS(BSBase):
-    def __init__(self, ts_code, date, tactics_code):
-        super().__init__(ts_code=ts_code, date=date, tactics_code=tactics_code)
+class BS(BSBaseOneSell):
+    def __init__(self, ts_code, date, tactics_code, update_holden_flag=False):
+        super().__init__(ts_code=ts_code, date=date, tactics_code=tactics_code, update_holden_flag=update_holden_flag)
         self._start_date, self._end_date = date - datetime.timedelta(days=90), date
 
     def buy(self):
@@ -41,13 +41,18 @@ class BS(BSBase):
         if len(raise_list) / len(pct_chg_list) > 0.4 and len(raise_percent_list) / len(pct_chg_list) > 0.2 and not daily_limit \
                 and last_days_sum_pct_chg < 0:
             buy_flag = True
+            buy_point = security_point_data[date_pct_chg_list[-1][0]]["close"]  # 不知道今日的买入价格是多少的, 暂时以前一日的收盘价作为今日的买入价格
         else:
             buy_flag = False
+            buy_point = 0
 
-        self._buy_flag, self._buy_point, self._buy_amount = buy_flag, 0, 0
+        self._buy_flag, self._buy_point, self._buy_amount = buy_flag, buy_point, self._buy_amount
 
     def sell(self):
-        pass
+        if self._hold_amount:
+            security_point_data = SecurityData().get_security_point_data(self._ts_code, self._end_date, self._end_date).get(self._end_date, {})
+            if security_point_data["close"] > self._hold_point * 1.05:
+                self._sell_flag, self._sell_point, self._sell_amount = True, security_point_data["close"], self._hold_amount
 
     def loss_stop(self):
         pass
