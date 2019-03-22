@@ -27,7 +27,7 @@ class SecurityData:
                 "close": close,
                 "pre_close": pre_close,
                 "change": change,
-                "pct_chg": pct_chg / 100,
+                "pct_chg": pct_chg,
                 "vol": vol,
                 "amount": amount,
             }
@@ -36,17 +36,18 @@ class SecurityData:
 
     def get_security_daily_basic_data(self, ts_code, start_date, end_date):
         sql = """
-        select ts_code, trade_date, close, turnover_rate, volume_ratio, pe, pe_ttm, pb, ps, ps_ttm, total_share, float_share, free_share, total_mv, circ_mv from security_point_data 
+        select ts_code, trade_date, close, turnover_rate, turnover_rate_f, volume_ratio, pe, pe_ttm, pb, ps, ps_ttm, total_share, float_share, free_share, total_mv, circ_mv from security_point_data 
         where ts_code = :ts_code and trade_date between :start_date and :end_date
         """
         args = {"ts_code": ts_code, "start_date": start_date, "end_date": end_date}
         result = get_multi_data(self._session, sql, args)
 
         security_point_data = {}
-        for ts_code, trade_date, close, turnover_rate, volume_ratio, pe, pe_ttm, pb, ps, ps_ttm, total_share, float_share, free_share, total_mv, circ_mv in result:
+        for ts_code, trade_date, close, turnover_rate, turnover_rate_f, volume_ratio, pe, pe_ttm, pb, ps, ps_ttm, total_share, float_share, free_share, total_mv, circ_mv in result:
             security_point_data[trade_date] = {
                 "close": close,
-                "turnover_rate": turnover_rate / 100 if turnover_rate else turnover_rate,
+                "turnover_rate": turnover_rate,
+                "turnover_rate_f": turnover_rate_f,
                 "volume_ratio": volume_ratio,
                 "pe": pe,
                 "pe_ttm": pe_ttm,
