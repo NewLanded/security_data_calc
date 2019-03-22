@@ -1,6 +1,6 @@
 import datetime
 
-from source.util.util_base.db_util import get_connection, update_data
+from util.util_base.db_util import get_connection, update_data
 
 
 class Dml:

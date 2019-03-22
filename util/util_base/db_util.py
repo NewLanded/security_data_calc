@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from source.conf import DB_CONNECT
+from conf import DB_CONNECT
 
-engine = create_engine(DB_CONNECT, echo=False, pool_recycle=3600)
+engine = create_engine(DB_CONNECT, echo=False, pool_size=10, pool_recycle=3600)
 DBSession = sessionmaker(bind=engine)
 
 

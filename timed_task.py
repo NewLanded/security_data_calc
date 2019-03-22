@@ -5,7 +5,7 @@ from logging import handlers
 
 import schedule
 
-from source.interface import fluctuation_tactics_1
+from strategy.buy import strategy_1
 
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
 logger.setLevel(logging.INFO)
@@ -22,7 +22,7 @@ logger.addHandler(rf)
 def job1():
     logger.info('starting fluctuation_tactics_1')
     try:
-        fluctuation_tactics_1.start()
+        strategy_1.start()
     except Exception as e:
         logger.error('error fluctuation_tactics_1, error = {0}'.format(str(e)))
     logger.info('finished fluctuation_tactics_1')

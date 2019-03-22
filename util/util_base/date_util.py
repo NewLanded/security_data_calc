@@ -12,6 +12,12 @@ def convert_str_to_datetime(date):
         return datetime.datetime.strptime(date, "%Y%m%d")
 
 
+def convert_pd_timestamp_to_datetime(timestamp):
+    date = timestamp.date()
+    date = datetime.datetime(date.year, date.month, date.day)
+    return date
+
+
 def get_date_range(start_date, end_date):
     date_range = []
     date_now = start_date
