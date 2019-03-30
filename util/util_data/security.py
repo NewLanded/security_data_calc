@@ -15,12 +15,12 @@ class Security:
         args = {"ts_code": ts_code}
         result = get_single_row(self._session, sql, args)
         result = {
-            "code": result[0],
-            "name": result[1],
-            "area": result[2],
-            "industry": result[3],
-            "market": result[4],
-            "list_date": result[5]
+            "code": result[1],
+            "name": result[2],
+            "area": result[3],
+            "industry": result[4],
+            "market": result[5],
+            "list_date": result[6]
         }
 
         return result

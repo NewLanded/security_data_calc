@@ -19,6 +19,7 @@ class SecurityData:
         args = {"ts_code": ts_code, "start_date": start_date, "end_date": end_date}
         security_point_data = pd.read_sql_query(sql, engine, params=args)
         security_point_data.set_index(security_point_data["trade_date"], inplace=True)
+        security_point_data = security_point_data.sort_index()
 
         return security_point_data
 
@@ -30,6 +31,7 @@ class SecurityData:
         args = {"ts_code": ts_code, "start_date": start_date, "end_date": end_date}
         security_daily_basic_data = pd.read_sql_query(sql, engine, params=args)
         security_daily_basic_data.set_index(security_daily_basic_data["trade_date"], inplace=True)
+        security_daily_basic_data = security_daily_basic_data.sort_index()
 
         return security_daily_basic_data
 

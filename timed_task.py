@@ -6,6 +6,7 @@ from logging import handlers
 import schedule
 
 from strategy.buy import strategy_1
+from strategy.buy import bband
 
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
 logger.setLevel(logging.INFO)
@@ -20,12 +21,12 @@ logger.addHandler(rf)
 
 
 def job1():
-    logger.info('starting fluctuation_tactics_1')
+    logger.info('starting bband')
     try:
-        strategy_1.start()
+        bband.start()
     except Exception as e:
-        logger.error('error fluctuation_tactics_1, error = {0}'.format(str(e)))
-    logger.info('finished fluctuation_tactics_1')
+        logger.error('error bband, error = {0}'.format(str(e)))
+    logger.info('finished bband')
 
 
 def job1_task():
@@ -33,7 +34,7 @@ def job1_task():
 
 
 def run():
-    schedule.every().day.at("1:00").do(job1_task)
+    schedule.every().day.at("19:45").do(job1_task)
 
 
 if __name__ == "__main__":
