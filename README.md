@@ -21,5 +21,5 @@ show variables like 'explicit_defaults_for_timestamp';
 explicit_defaults_for_timestamp=true
 
 
-nohup /home/stock/stock_py_env/bin/python timed_task.py > /dev/null 2>&1 &
+nohup /home/stock/anaconda3/envs/stock/bin/python timed_task.py > /dev/null 2>&1 &
 
