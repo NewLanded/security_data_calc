@@ -14,29 +14,13 @@ engine = create_engine(DB_CONNECT, echo=False, pool_recycle=3600)
 
 def get_security_data(ts_code):
     sql = """
-    select trade_date, open, high, low, close, vol as volume from qfq_security_point_data where ts_code='{0}' 
+    select trade_date, open, high, low, close, vol as volume from security_point_data where ts_code='{0}' 
     order by trade_date
     """.format(ts_code)
     df = pd.read_sql_query(sql, engine)
     df = df.set_index('trade_date')
     df = df.sort_index()
     return df
-
-
-# def get_all_ts_code():
-#     sql = """
-#     select ts_code from security_status where normal_status=1 and tactics_5_status=1 and tactics_4_status=1 and tactics_3_status=1
-#     """
-#     df = pd.read_sql_query(sql, engine)
-#     aa = list(df["ts_code"])
-#     return aa
-def get_all_ts_code():
-    sql = """
-    select ts_code from security_concept_info_detail where concept_code='TS11'
-    """
-    df = pd.read_sql_query(sql, engine)
-    aa = list(df["ts_code"])
-    return aa
 
 
 class AllIn(bt.Sizer):
@@ -262,7 +246,9 @@ class TestStrategy(bt.Strategy):
 
 if __name__ == '__main__':
     result = []
-    # all_ts_code = get_all_ts_code()
+    all_ts_code = ['000507.SZ', '300663.SZ', '601186.SH', '002013.SZ', '601118.SH', '601336.SH', '002153.SZ', '600967.SH', '603338.SH',
+                   '300349.SZ', '001979.SZ', '600283.SH', '002025.SZ', '002159.SZ', '600031.SH', '600271.SH', '002579.SZ', '002179.SZ',
+                   '002439.SZ', '600036.SH', '000505.SZ']
     all_ts_code = get_result_ts_code_list()
     print("ts_code num is {0}".format(len(all_ts_code)))
     for ts_code in all_ts_code:
@@ -278,8 +264,8 @@ if __name__ == '__main__':
 
             # data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2017, 3, 1),
             #                            todate=datetime.datetime(2018, 6, 30))
-            data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2018, 11, 1),
-                                       todate=datetime.datetime(2019, 12, 30))
+            data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2018, 9, 1),
+                                       todate=datetime.datetime(2019, 12, 31))
             # data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2017, 6, 30),
             #                            todate=datetime.datetime(2019, 4, 30))
             cerebro.adddata(data)
