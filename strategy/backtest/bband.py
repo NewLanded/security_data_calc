@@ -7,7 +7,6 @@ from sklearn.linear_model import LinearRegression
 from sqlalchemy import create_engine
 
 from conf import DB_CONNECT
-from strategy.backtest.result_code import get_result_ts_code_list
 
 engine = create_engine(DB_CONNECT, echo=False, pool_recycle=3600)
 
@@ -262,8 +261,7 @@ class TestStrategy(bt.Strategy):
 
 if __name__ == '__main__':
     result = []
-    # all_ts_code = get_all_ts_code()
-    all_ts_code = get_result_ts_code_list()
+    all_ts_code = get_all_ts_code()
     print("ts_code num is {0}".format(len(all_ts_code)))
     for ts_code in all_ts_code:
         try:

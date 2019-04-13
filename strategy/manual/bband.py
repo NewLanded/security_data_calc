@@ -7,7 +7,7 @@ from sklearn.linear_model import LinearRegression
 from sqlalchemy import create_engine
 
 from conf import DB_CONNECT
-from strategy.backtest.result_code import get_result_ts_code_list
+from strategy.manual.result_code import get_result_ts_code_list
 
 engine = create_engine(DB_CONNECT, echo=False, pool_recycle=3600)
 
@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
             # data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2017, 3, 1),
             #                            todate=datetime.datetime(2018, 6, 30))
-            data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2018, 9, 1),
+            data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2018, 6, 1),
                                        todate=datetime.datetime(2019, 12, 31))
             # data = bt.feeds.PandasData(dataname=security_data, fromdate=datetime.datetime(2017, 6, 30),
             #                            todate=datetime.datetime(2019, 4, 30))
