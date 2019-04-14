@@ -118,6 +118,7 @@ if __name__ == "__main__":
         start(date, result)
         # break
     result = pd.concat(result)
+    result = result.reset_index(drop=True)
 
     result.to_csv('./penetrate_lower_bband.csv')
     # result = pd.read_csv('./penetrate_lower_bband.csv')
