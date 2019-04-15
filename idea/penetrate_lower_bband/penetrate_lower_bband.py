@@ -1,8 +1,3 @@
-"""
-上穿布林线下线后, 第一天跌, 那么后5天会赚的几率
-上穿布林线下线后, 第一天涨幅较小(<=2%), 那么后5天会赚的几率
-上穿布林线下线后, 第一天涨幅较大(>2%), 那么后5天会赚的几率
-"""
 
 import datetime
 import math
@@ -98,7 +93,7 @@ def start(date_now, result):
                     security_point_data = SecurityData().get_qfq_security_point_data(ts_code, end_date, end_date + datetime.timedelta(days=25))
                     result_now = pd.DataFrame(
                         [security_point_data.iloc[0], security_point_data.iloc[1], security_point_data.iloc[2], security_point_data.iloc[5], security_point_data.iloc[10]],
-                        index=[['next_0_day', 'next_1_day', 'next_2_day', 'next_5_day', 'next_10_day'], [1, 1, 1, 1, 1]])
+                        index=[['next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day', 'next_6_day', 'next_7_day', 'next_8_day', 'next_9_day', 'next_10_day'], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
                     result_now = result_now.unstack(level=0)
                     # print(result_now)
                     result.append(result_now)
@@ -113,8 +108,8 @@ if __name__ == "__main__":
     result = []
     for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2019, 1, 31)):
         print(date, datetime.datetime.now())
-        # with open('./date_now_log', "w") as f:
-        #     f.write(convert_datetime_to_str(date))
+        with open('./date_now_log', "w") as f:
+            f.write(convert_datetime_to_str(date))
         start(date, result)
         # break
     result = pd.concat(result)
