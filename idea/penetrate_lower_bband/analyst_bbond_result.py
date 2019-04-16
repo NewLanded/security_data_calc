@@ -101,12 +101,70 @@ def idea_06(data):
     print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
 
     all_ts_code = get_result_ts_code_list()
-    date = datetime.datetime(2019, 3, 29)
+    # date = datetime.datetime(2019, 3, 29)
+    date = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
     for ts_code in all_ts_code:
-        security_point_data = SecurityData().get_security_point_data(ts_code, date, date).loc[date]
+        security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
+        if security_point_data is False:
+            security_point_data = security_point_data.loc[date]
+        else:
+            continue
+
         predict_data = [security_point_data["open"], security_point_data["close"], security_point_data["high"], security_point_data["low"]]
         predict_data = np.array([predict_data]) / (predict_data[0] / 100)
         print(ts_code, forest.predict(predict_data))
+
+
+def idea_07(data):
+    """
+    随机森林尝试
+    """
+    data = data[
+        (result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"])]
+
+    percent_series = data["open"]["next_0_day"] / 100
+
+    target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
+                       "next_10_day"]
+    target_day_list = ["next_2_day", "next_5_day", "next_10_day"]
+    target_data_list = []
+    for day in target_day_list:
+        target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
+    data = pd.DataFrame({
+        "open": data["open"]["next_0_day"] / percent_series,
+        "close": data["close"]["next_0_day"] / percent_series,
+        "high": data["high"]["next_0_day"] / percent_series,
+        "low": data["low"]["next_0_day"] / percent_series
+    }).values
+
+    forest_list = []
+    for day, target_data in target_data_list:
+        X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
+        forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=12)
+        forest.fit(X_train, y_train)
+        forest_list.append([day, forest, X_train, X_test, y_train, y_test])
+
+    for day, forest, X_train, X_test, y_train, y_test in forest_list:
+        print("day is {0}".format(day))
+        print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
+        print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
+
+        all_ts_code = get_result_ts_code_list()
+        # date = datetime.datetime(2019, 3, 29)
+        date = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
+        for ts_code in all_ts_code:
+            security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
+            if security_point_data.empty is False:
+                security_point_data = security_point_data.loc[date]
+            else:
+                continue
+
+            predict_data = [security_point_data["open"], security_point_data["close"], security_point_data["high"],
+                            security_point_data["low"]]
+            predict_data = np.array([predict_data]) / (predict_data[0] / 100)
+            print(ts_code, forest.predict(predict_data))
+
+        print("\n\n\n\n\n")
 
 
 def start(data):
@@ -115,7 +173,8 @@ def start(data):
     # idea_03(data)
     # idea_04(data)
     # idea_05(data)
-    idea_06(data)
+    # idea_06(data)
+    idea_07(data)
 
 
 if __name__ == "__main__":
