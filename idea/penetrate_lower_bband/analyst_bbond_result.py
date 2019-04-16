@@ -74,8 +74,8 @@ def idea_05(data):
 def idea_06(data):
     """
     随机森林尝试
-Accuracy on training set: 0.766
-Accuracy on test set: 0.765
+    Accuracy on training set: 0.766
+    Accuracy on test set: 0.765
     """
 
     # https://www.cnblogs.com/zichun-zeng/p/4761602.html  模型保存

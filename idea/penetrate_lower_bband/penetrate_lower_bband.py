@@ -1,4 +1,3 @@
-
 import datetime
 import math
 
@@ -8,7 +7,6 @@ from sklearn.linear_model import LinearRegression
 
 from util.util_base.date_util import get_date_range, convert_datetime_to_str
 from util.util_data.date import Date
-from util.util_data.result import Result
 from util.util_data.security import Security
 from util.util_data.security_data import SecurityData
 
@@ -92,8 +90,11 @@ def start(date_now, result):
                 if buy_flag is True:
                     security_point_data = SecurityData().get_qfq_security_point_data(ts_code, end_date, end_date + datetime.timedelta(days=25))
                     result_now = pd.DataFrame(
-                        [security_point_data.iloc[0], security_point_data.iloc[1], security_point_data.iloc[2], security_point_data.iloc[5], security_point_data.iloc[10]],
-                        index=[['next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day', 'next_6_day', 'next_7_day', 'next_8_day', 'next_9_day', 'next_10_day'], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
+                        [security_point_data.iloc[0], security_point_data.iloc[1], security_point_data.iloc[2], security_point_data.iloc[3], security_point_data.iloc[4],
+                         security_point_data.iloc[5], security_point_data.iloc[6], security_point_data.iloc[7], security_point_data.iloc[8], security_point_data.iloc[9],
+                         security_point_data.iloc[10]],
+                        index=[['next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day', 'next_6_day', 'next_7_day', 'next_8_day', 'next_9_day',
+                                'next_10_day'], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
                     result_now = result_now.unstack(level=0)
                     # print(result_now)
                     result.append(result_now)
