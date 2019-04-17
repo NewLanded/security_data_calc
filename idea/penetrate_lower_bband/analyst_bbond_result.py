@@ -126,7 +126,6 @@ def idea_07(data):
 
     target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
                        "next_10_day"]
-    target_day_list = ["next_2_day", "next_5_day", "next_10_day"]
     target_data_list = []
     for day in target_day_list:
         target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
