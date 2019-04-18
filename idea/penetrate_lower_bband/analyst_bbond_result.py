@@ -71,100 +71,155 @@ def idea_05(data):
     print(raise_percent)
 
 
-def idea_06(data):
-    """
-    随机森林尝试
-    Accuracy on training set: 0.766
-    Accuracy on test set: 0.765
-    """
-
-    # https://www.cnblogs.com/zichun-zeng/p/4761602.html  模型保存
-
-    data = data[
-        (result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"])]
-
-    percent_series = data["open"]["next_0_day"] / 100
-
-    target = (data["close"]["next_5_day"] > data["high"]["next_1_day"]).values
-    data = pd.DataFrame({
-        "open": data["open"]["next_0_day"] / percent_series,
-        "close": data["close"]["next_0_day"] / percent_series,
-        "high": data["high"]["next_0_day"] / percent_series,
-        "low": data["low"]["next_0_day"] / percent_series
-    }).values
-
-    X_train, X_test, y_train, y_test = train_test_split(data, target, random_state=0)
-    forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=12)
-    forest.fit(X_train, y_train)
-
-    print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
-    print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
-
-    all_ts_code = get_result_ts_code_list()
-    # date = datetime.datetime(2019, 3, 29)
-    date = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
-    for ts_code in all_ts_code:
-        security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
-        if security_point_data is False:
-            security_point_data = security_point_data.loc[date]
-        else:
-            continue
-
-        predict_data = [security_point_data["open"], security_point_data["close"], security_point_data["high"], security_point_data["low"]]
-        predict_data = np.array([predict_data]) / (predict_data[0] / 100)
-        print(ts_code, forest.predict(predict_data))
+# def idea_06(data):
+#     """
+#     随机森林尝试
+#     Accuracy on training set: 0.766
+#     Accuracy on test set: 0.765
+#     """
+#
+#     # https://www.cnblogs.com/zichun-zeng/p/4761602.html  模型保存
+#
+#     data = data[
+#         (result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"])]
+#
+#     percent_series = data["open"]["next_0_day"] / 100
+#
+#     target = (data["close"]["next_5_day"] > data["high"]["next_1_day"]).values
+#     data = pd.DataFrame({
+#         "open": data["open"]["next_0_day"] / percent_series,
+#         "close": data["close"]["next_0_day"] / percent_series,
+#         "high": data["high"]["next_0_day"] / percent_series,
+#         "low": data["low"]["next_0_day"] / percent_series
+#     }).values
+#
+#     X_train, X_test, y_train, y_test = train_test_split(data, target, random_state=0)
+#     forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=12)
+#     forest.fit(X_train, y_train)
+#
+#     print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
+#     print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
+#
+#     all_ts_code = get_result_ts_code_list()
+#     # date = datetime.datetime(2019, 3, 29)
+#     date = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
+#     for ts_code in all_ts_code:
+#         security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
+#         if security_point_data is False:
+#             security_point_data = security_point_data.loc[date]
+#         else:
+#             continue
+#
+#         predict_data = [security_point_data["open"], security_point_data["close"], security_point_data["high"], security_point_data["low"]]
+#         predict_data = np.array([predict_data]) / (predict_data[0] / 100)
+#         print(ts_code, forest.predict(predict_data))
 
 
 def idea_07(data):
     """
     随机森林尝试
     """
-    data = data[
-        (result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"])]
+    max_depth_map_list = [
+        {
+            "next_2_day": 12,
+            "next_3_day": 12,
+            "next_4_day": 12,
+            "next_5_day": 12,
+            "next_6_day": 12,
+            "next_7_day": 12,
+            "next_8_day": 12,
+            "next_9_day": 12,
+            "next_10_day": 12
+        },
+        {
+            "next_2_day": 12,
+            "next_3_day": 12,
+            "next_4_day": 12,
+            "next_5_day": 12,
+            "next_6_day": 12,
+            "next_7_day": 12,
+            "next_8_day": 12,
+            "next_9_day": 12,
+            "next_10_day": 12
+        },
+        {
+            "next_2_day": 12,
+            "next_3_day": 12,
+            "next_4_day": 12,
+            "next_5_day": 12,
+            "next_6_day": 12,
+            "next_7_day": 12,
+            "next_8_day": 12,
+            "next_9_day": 12,
+            "next_10_day": 12
+        },
+        {
+            "next_2_day": 12,
+            "next_3_day": 12,
+            "next_4_day": 12,
+            "next_5_day": 12,
+            "next_6_day": 12,
+            "next_7_day": 12,
+            "next_8_day": 12,
+            "next_9_day": 12,
+            "next_10_day": 12
+        }
+    ]
 
-    percent_series = data["open"]["next_0_day"] / 100
+    data_low_low = data[(result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"])]
+    data_low_high = data[(result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] > result["close"]["next_0_day"])]
+    data_high_low = data[(result["open"]["next_1_day"] > result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"])]
+    data_high_high = data[(result["open"]["next_1_day"] > result["close"]["next_0_day"]) & (result["close"]["next_1_day"] > result["close"]["next_0_day"])]
 
-    target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
-                       "next_10_day"]
-    target_data_list = []
-    for day in target_day_list:
-        target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
-    data = pd.DataFrame({
-        "open": data["open"]["next_0_day"] / percent_series,
-        "close": data["close"]["next_0_day"] / percent_series,
-        "high": data["high"]["next_0_day"] / percent_series,
-        "low": data["low"]["next_0_day"] / percent_series
-    }).values
+    for point_tendency_type_str, data, max_depth_map in zip(["data_low_low", "data_low_high", "data_high_low", "data_high_high"], [data_low_low, data_low_high, data_high_low, data_high_high], max_depth_map_list):
+        print(point_tendency_type_str)
+        percent_series = data["open"]["next_0_day"] / 100
 
-    forest_list = []
-    for day, target_data in target_data_list:
-        X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
-        forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=12)
-        forest.fit(X_train, y_train)
-        forest_list.append([day, forest, X_train, X_test, y_train, y_test])
+        target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
+                           "next_10_day"]
+        target_data_list = []
+        for day in target_day_list:
+            target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
+        data = pd.DataFrame({
+            "open": data["open"]["next_0_day"] / percent_series,
+            "close": data["close"]["next_0_day"] / percent_series,
+            "high": data["high"]["next_0_day"] / percent_series,
+            "low": data["low"]["next_0_day"] / percent_series
+        }).values
 
-    for day, forest, X_train, X_test, y_train, y_test in forest_list:
-        print("day is {0}".format(day))
-        print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
-        print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
+        forest_list = []
+        for day, target_data in target_data_list:
+            max_depth = max_depth_map[day]
+            X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
+            forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=max_depth)
+            forest.fit(X_train, y_train)
+            forest_list.append([day, forest, X_train, X_test, y_train, y_test])
 
-        all_ts_code = get_result_ts_code_list()
-        # date = datetime.datetime(2019, 3, 29)
-        date = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
-        for ts_code in all_ts_code:
-            security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
-            if security_point_data.empty is False:
-                security_point_data = security_point_data.loc[date]
-            else:
-                continue
+        for day, forest, X_train, X_test, y_train, y_test in forest_list:
+            if forest.score(X_train, y_train) > 0.7 and forest.score(X_test, y_test) > 0.7:
 
-            predict_data = [security_point_data["open"], security_point_data["close"], security_point_data["high"],
-                            security_point_data["low"]]
-            predict_data = np.array([predict_data]) / (predict_data[0] / 100)
-            print(ts_code, forest.predict(predict_data))
+                print("day is {0}".format(day))
+                print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
+                print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
 
+                # all_ts_code = get_result_ts_code_list()
+                # date = datetime.datetime(datetime.datetime.now().year, datetime.datetime.now().month, datetime.datetime.now().day)
+                # for ts_code in all_ts_code:
+                #     security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
+                #     if security_point_data.empty is False:
+                #         security_point_data = security_point_data.loc[date]
+                #     else:
+                #         continue
+                #
+                #     predict_data = [security_point_data["open"], security_point_data["close"], security_point_data["high"],
+                #                     security_point_data["low"]]
+                #     predict_data = np.array([predict_data]) / (predict_data[0] / 100)
+                #     print(ts_code, forest.predict(predict_data))
+                #
+                # print("\n\n\n\n\n")
         print("\n\n\n\n\n")
 
+# def idea_08(data):
 
 def start(data):
     # idea_01(data)
@@ -172,7 +227,6 @@ def start(data):
     # idea_03(data)
     # idea_04(data)
     # idea_05(data)
-    # idea_06(data)
     idea_07(data)
 
 
