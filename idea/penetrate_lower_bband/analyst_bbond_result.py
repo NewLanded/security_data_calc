@@ -208,7 +208,7 @@ def idea_07(data):
                 print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
 
                 all_ts_code = get_result_ts_code_list()
-                date_now = datetime.datetime.now() - datetime.timedelta(days=1)
+                date_now = datetime.datetime.now()
                 date = datetime.datetime(date_now.year, date_now.month, date_now.day)
                 for ts_code in all_ts_code:
                     security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
