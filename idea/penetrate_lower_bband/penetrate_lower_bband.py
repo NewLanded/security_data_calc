@@ -88,17 +88,19 @@ def start(date_now, result):
                 buy_flag = calc_bs_data(security_point_data)
 
                 if buy_flag is True:
-                    security_point_data = SecurityData().get_qfq_security_point_data(ts_code, end_date, end_date + datetime.timedelta(days=25))
+                    previous_work_day = Date().get_previous_workday(end_date)
+                    previous_2_work_day = Date().get_previous_workday(previous_work_day)
+                    security_point_data = SecurityData().get_qfq_security_point_data(ts_code, previous_2_work_day, end_date + datetime.timedelta(days=25))
                     result_now = pd.DataFrame(
-                        [security_point_data.iloc[0], security_point_data.iloc[1], security_point_data.iloc[2], security_point_data.iloc[3], security_point_data.iloc[4],
-                         security_point_data.iloc[5], security_point_data.iloc[6], security_point_data.iloc[7], security_point_data.iloc[8], security_point_data.iloc[9],
-                         security_point_data.iloc[10]],
-                        index=[['next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day', 'next_6_day', 'next_7_day', 'next_8_day', 'next_9_day',
-                                'next_10_day'], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
+                        [security_point_data.loc[previous_2_work_day], security_point_data.loc[previous_work_day], security_point_data.iloc[1], security_point_data.iloc[2],
+                         security_point_data.iloc[3],
+                         security_point_data.iloc[4], security_point_data.iloc[5], security_point_data.iloc[6], security_point_data.iloc[7], security_point_data.iloc[8],
+                         security_point_data.iloc[9], security_point_data.iloc[10], security_point_data.iloc[11]],
+                        index=[['previous_2_day', 'previous_1_day', 'next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day', 'next_6_day', 'next_7_day',
+                                'next_8_day',
+                                'next_9_day', 'next_10_day'], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
                     result_now = result_now.unstack(level=0)
-                    # print(result_now)
                     result.append(result_now)
-                    # result = pd.concat([result, result_now])
 
             except Exception as e:
                 pass
@@ -108,14 +110,13 @@ def start(date_now, result):
 if __name__ == "__main__":
     result = []
     for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2019, 1, 31)):
+    # for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2016, 5, 5)):
         print(date, datetime.datetime.now())
         with open('./date_now_log', "w") as f:
             f.write(convert_datetime_to_str(date))
         start(date, result)
-        # break
     result = pd.concat(result)
     result = result.reset_index(drop=True)
 
     result.to_csv('./penetrate_lower_bband.csv')
-    # result = pd.read_csv('./penetrate_lower_bband.csv')
     print(result[['close', 'open', 'pct_chg']])
