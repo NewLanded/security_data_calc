@@ -121,15 +121,15 @@ def idea_07(data):
     """
     max_depth_map_list = [
         {
-            "next_2_day": 1,  # 0.92
-            "next_3_day": 9,  # 0.85
-            "next_4_day": 1,  # 0.825
-            "next_5_day": 9,  # 0.8
-            "next_6_day": 1,  # 0.76
-            "next_7_day": 8,  # 0.75
-            "next_8_day": 8,  # 0.75
-            "next_9_day": 7,  # 0.75
-            "next_10_day": 8  # 0.74
+            "next_2_day": 1,  # 0.925
+            "next_3_day": 1,  # 0.87
+            "next_4_day": 1,  # 0.83
+            "next_5_day": 1,  # 0.81
+            "next_6_day": 1,  # 0.77
+            "next_7_day": 1,  # 0.745
+            "next_8_day": 1,  # 0.75
+            "next_9_day": 1,  # 0.76
+            "next_10_day": 1  # 0.75
         },
         {
             "next_2_day": 8,  # 0.6
@@ -167,7 +167,8 @@ def idea_07(data):
     ]
 
     data_low_low = data[
-        (result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"])]
+        (result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] < result["close"]["next_0_day"]) & (
+                result["open"]["next_1_day"] >= result["close"]["next_1_day"])]
     data_low_high = data[
         (result["open"]["next_1_day"] < result["close"]["next_0_day"]) & (result["close"]["next_1_day"] > result["close"]["next_0_day"])]
     data_high_low = data[
@@ -223,6 +224,7 @@ def idea_07(data):
                     predict_result_now = forest.predict(predict_data)
                     if predict_result_now == [True]:
                         print(ts_code, predict_result_now)
+                    # print(ts_code, predict_result_now)
 
                 print("\n\n")
         print("\n\n\n")
@@ -242,6 +244,76 @@ def idea_08(data):
         (result["open"]["next_1_day"] > result["close"]["next_0_day"]) & (result["close"]["next_1_day"] > result["close"]["next_0_day"])]
 
     data = data_low_low
+
+    percent_series = data["open"]["next_0_day"] / 100
+
+    target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
+                       "next_10_day"]
+    target_data_list = []
+    for day in target_day_list:
+        target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
+    data = pd.DataFrame({
+        "open": data["open"]["next_0_day"] / percent_series,
+        "close": data["close"]["next_0_day"] / percent_series,
+        "high": data["high"]["next_0_day"] / percent_series,
+        "low": data["low"]["next_0_day"] / percent_series
+    }).values
+
+    for day, target_data in target_data_list:
+        print("day is {0}".format(day))
+        depth_list = []
+        training_score_list = []
+        test_score_list = []
+        for max_depth in range(1, 31):
+            X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
+            forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=max_depth)
+            forest.fit(X_train, y_train)
+            print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
+            print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
+            training_score_list.append(forest.score(X_train, y_train))
+            test_score_list.append(forest.score(X_test, y_test))
+            depth_list.append(max_depth)
+
+        # plt.figure(figsize=(22, 15))
+        plt.figure(figsize=(6, 6))
+        plt.locator_params(nbins=30, axis='x')
+        plt.plot(depth_list, training_score_list, ls="-", lw=2, label="training figure")
+        plt.plot(depth_list, test_score_list, ls="-", lw=2, label="test figure")  # ls: 折线图线条风格, lw: 线条宽度, label: 标签文本
+        plt.title(day)
+        plt.legend()  # 用以显示label的内容
+        # plt.show()
+        plt.savefig('./day_' + str(day) + '.png')
+        print("\n\n\n\n\n")
+
+
+def idea_08_2(data):
+    """
+    测试不同max_depth的表现
+    """
+    data_low_le_low = data[
+        (result["open"]["next_1_day"] <= result["close"]["next_0_day"]) & (
+                result["close"]["next_1_day"] <= result["close"]["next_0_day"]) & (
+                result["open"]["next_1_day"] <= result["close"]["next_1_day"])]
+    data_low_ge_low = data[
+        (result["open"]["next_1_day"] <= result["close"]["next_0_day"]) & (
+                result["close"]["next_1_day"] <= result["close"]["next_0_day"]) & (
+                result["open"]["next_1_day"] >= result["close"]["next_1_day"])]
+
+    data_high_low = data[
+        (result["open"]["next_1_day"] >= result["close"]["next_0_day"]) & (result["close"]["next_1_day"] <= result["close"]["next_0_day"])]
+
+    data_high_le_high = data[
+        (result["open"]["next_1_day"] >= result["close"]["next_0_day"]) & (
+                result["close"]["next_1_day"] >= result["close"]["next_0_day"]) & (
+                result["open"]["next_1_day"] <= result["close"]["next_1_day"])]
+    data_high_ge_high = data[
+        (result["open"]["next_1_day"] >= result["close"]["next_0_day"]) & (
+                result["close"]["next_1_day"] >= result["close"]["next_0_day"]) & (
+                result["open"]["next_1_day"] >= result["close"]["next_1_day"])]
+
+    print(len(data_low_le_low), len(data_low_ge_low), len(data_high_low), len(data_high_le_high), len(data_high_ge_high))
+
+    data = data_low_ge_low
 
     percent_series = data["open"]["next_0_day"] / 100
 
@@ -320,8 +392,9 @@ def start(data):
     # idea_03(data)
     # idea_04(data)
     # idea_05(data)
-    # idea_07(data)
-    idea_08(data)
+    idea_07(data)
+    # idea_08(data)
+    # idea_08_2(data)
     # visualization_1(data)
 
 
