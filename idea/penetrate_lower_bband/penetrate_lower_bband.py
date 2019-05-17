@@ -90,15 +90,12 @@ def start(date_now, result):
                 if buy_flag is True:
                     previous_work_day = Date().get_previous_workday(end_date)
                     previous_2_work_day = Date().get_previous_workday(previous_work_day)
-                    security_point_data = SecurityData().get_qfq_security_point_data(ts_code, previous_2_work_day, end_date + datetime.timedelta(days=25))
+                    security_point_data = SecurityData().get_qfq_security_point_data(ts_code, previous_2_work_day, end_date + datetime.timedelta(days=20))
                     result_now = pd.DataFrame(
-                        [security_point_data.loc[previous_2_work_day], security_point_data.loc[previous_work_day], security_point_data.iloc[1], security_point_data.iloc[2],
-                         security_point_data.iloc[3],
-                         security_point_data.iloc[4], security_point_data.iloc[5], security_point_data.iloc[6], security_point_data.iloc[7], security_point_data.iloc[8],
-                         security_point_data.iloc[9], security_point_data.iloc[10], security_point_data.iloc[11]],
-                        index=[['previous_2_day', 'previous_1_day', 'next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day', 'next_6_day', 'next_7_day',
-                                'next_8_day',
-                                'next_9_day', 'next_10_day'], [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]])
+                        [security_point_data.loc[previous_2_work_day], security_point_data.loc[previous_work_day], security_point_data.iloc[2], security_point_data.iloc[3],
+                         security_point_data.iloc[4],
+                         security_point_data.iloc[5], security_point_data.iloc[6], security_point_data.iloc[7]],
+                        index=[['previous_2_day', 'previous_1_day', 'next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day'], [1, 1, 1, 1, 1, 1, 1, 1]])
                     result_now = result_now.unstack(level=0)
                     result.append(result_now)
 

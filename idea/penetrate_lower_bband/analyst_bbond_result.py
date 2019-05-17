@@ -125,44 +125,24 @@ def idea_07(data):
             "next_3_day": 1,  # 0.87
             "next_4_day": 1,  # 0.83
             "next_5_day": 1,  # 0.81
-            "next_6_day": 1,  # 0.77
-            "next_7_day": 1,  # 0.745
-            "next_8_day": 1,  # 0.75
-            "next_9_day": 1,  # 0.76
-            "next_10_day": 1  # 0.75
         },
         {
             "next_2_day": 8,  # 0.6
             "next_3_day": 1,  # 0.58
             "next_4_day": 1,  # 0.56
             "next_5_day": 6,  # 0.52
-            "next_6_day": 3,  # 0.51
-            "next_7_day": 3,  # 0.55
-            "next_8_day": 3,  # 0.58
-            "next_9_day": 3,  # 0.59
-            "next_10_day": 1  # 0.58
         },
         {
             "next_2_day": 12,  # 0.95
             "next_3_day": 1,  # 0.87
             "next_4_day": 10,  # 0.85
             "next_5_day": 1,  # 0.825
-            "next_6_day": 1,  # 0.80
-            "next_7_day": 1,  # 0.76
-            "next_8_day": 1,  # 0.77
-            "next_9_day": 1,  # 0.76
-            "next_10_day": 1  # 0.77
         },
         {
             "next_2_day": 8,  # 0.74
             "next_3_day": 4,  # 0.68
             "next_4_day": 1,  # 0.61
             "next_5_day": 5,  # 0.61
-            "next_6_day": 2,  # 0.58
-            "next_7_day": 2,  # 0.62
-            "next_8_day": 6,  # 0.67
-            "next_9_day": 3,  # 0.58
-            "next_10_day": 1  # 0.60
         }
     ]
 
@@ -182,8 +162,7 @@ def idea_07(data):
         print(point_tendency_type_str)
         percent_series = data["open"]["next_0_day"] / 100
 
-        target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
-                           "next_10_day"]
+        target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day"]
         target_data_list = []
         for day in target_day_list:
             target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
@@ -247,8 +226,7 @@ def idea_08(data):
 
     percent_series = data["open"]["next_0_day"] / 100
 
-    target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
-                       "next_10_day"]
+    target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day"]
     target_data_list = []
     for day in target_day_list:
         target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
@@ -317,8 +295,7 @@ def idea_08_2(data):
 
     percent_series = data["open"]["next_0_day"] / 100
 
-    target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day", "next_6_day", "next_7_day", "next_8_day", "next_9_day",
-                       "next_10_day"]
+    target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day"]
     target_data_list = []
     for day in target_day_list:
         target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
