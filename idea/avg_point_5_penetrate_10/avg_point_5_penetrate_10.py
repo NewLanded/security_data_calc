@@ -10,10 +10,13 @@ from util.util_data.security_data import SecurityData
 
 
 def calc_bs_data(security_point_data):
-    sma_data_5 = ta.MA(security_point_data["close"], timeperiod=5, matype=0)
-    sma_data_10 = ta.MA(security_point_data["close"], timeperiod=10, matype=0)
+    if security_point_data.iloc[-1]["close"] > 40:
+        return False
 
-    if sma_data_5 > sma_data_10:
+    sma_data_5 = ta.MA(security_point_data["close"], timeperiod=7, matype=0)
+    sma_data_10 = ta.MA(security_point_data["close"], timeperiod=14, matype=0)
+
+    if sma_data_5[-1] > sma_data_10[-1]:
         return True
     else:
         return False
@@ -25,7 +28,7 @@ def start(date_now, result):
         # ts_codes = ['002062.SZ', '002565.SZ']
         for ts_code in ts_codes:
             try:
-                start_date, end_date = date_now - datetime.timedelta(days=90), date_now
+                start_date, end_date = date_now - datetime.timedelta(days=30), date_now
                 security_point_data = SecurityData().get_qfq_security_point_data(ts_code, start_date, end_date)
                 buy_flag = calc_bs_data(security_point_data)
 
@@ -49,7 +52,7 @@ def start(date_now, result):
 if __name__ == "__main__":
     result = []
     # for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2019, 1, 31)):
-    for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2016, 5, 5)):
+    for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2016, 5, 10)):
         print(date, datetime.datetime.now())
         with open('./date_now_log', "w") as f:
             f.write(convert_datetime_to_str(date))
