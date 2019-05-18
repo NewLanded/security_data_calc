@@ -121,28 +121,28 @@ def idea_07(data):
     """
     max_depth_map_list = [
         {
-            "next_2_day": 1,  # 0.925
-            "next_3_day": 1,  # 0.87
-            "next_4_day": 1,  # 0.83
-            "next_5_day": 1,  # 0.81
+            "next_2_day": 1,
+            "next_3_day": 1,
+            "next_4_day": 1,
+            "next_5_day": 1,
         },
         {
-            "next_2_day": 8,  # 0.6
-            "next_3_day": 1,  # 0.58
-            "next_4_day": 1,  # 0.56
-            "next_5_day": 6,  # 0.52
+            "next_2_day": 4,
+            "next_3_day": 1,
+            "next_4_day": 4,
+            "next_5_day": 1,
         },
         {
-            "next_2_day": 12,  # 0.95
-            "next_3_day": 1,  # 0.87
-            "next_4_day": 10,  # 0.85
-            "next_5_day": 1,  # 0.825
+            "next_2_day": 1,
+            "next_3_day": 1,
+            "next_4_day": 1,
+            "next_5_day": 1,
         },
         {
-            "next_2_day": 8,  # 0.74
-            "next_3_day": 4,  # 0.68
-            "next_4_day": 1,  # 0.61
-            "next_5_day": 5,  # 0.61
+            "next_2_day": 1,
+            "next_3_day": 1,
+            "next_4_day": 1,
+            "next_5_day": 3,
         }
     ]
 
