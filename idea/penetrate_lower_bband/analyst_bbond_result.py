@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 from strategy.manual.result_code import get_result_ts_code_list
+from util.util_data.result import Result
 from util.util_data.security_data import SecurityData
 
 
@@ -187,9 +188,10 @@ def idea_07(data):
                 print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
                 print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
 
-                all_ts_code = get_result_ts_code_list()
+                # all_ts_code = get_result_ts_code_list()
                 date_now = datetime.datetime.now()
                 date = datetime.datetime(date_now.year, date_now.month, date_now.day)
+                all_ts_code = Result().get_strategy_result_data("bbond", 'B', date)
                 for ts_code in all_ts_code:
                     security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
                     if security_point_data.empty is False:

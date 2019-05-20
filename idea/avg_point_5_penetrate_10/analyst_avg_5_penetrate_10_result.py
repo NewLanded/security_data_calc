@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 import numpy as np
 
 from strategy.manual.result_code import get_result_ts_code_list
+from util.util_data.result import Result
 from util.util_data.security_data import SecurityData
 
 
@@ -16,28 +17,28 @@ def idea_07(data):
     """
     max_depth_map_list = [
         {
-            "next_2_day": 1,  # 0.925
-            "next_3_day": 1,  # 0.87
-            "next_4_day": 1,  # 0.83
-            "next_5_day": 1,  # 0.81
+            "next_2_day": 1,
+            "next_3_day": 1,
+            "next_4_day": 1,
+            "next_5_day": 1,
         },
         {
-            "next_2_day": 8,  # 0.6
-            "next_3_day": 1,  # 0.58
-            "next_4_day": 1,  # 0.56
-            "next_5_day": 6,  # 0.52
+            "next_2_day": 1,
+            "next_3_day": 1,
+            "next_4_day": 1,
+            "next_5_day": 1,
         },
         {
-            "next_2_day": 12,  # 0.95
-            "next_3_day": 1,  # 0.87
-            "next_4_day": 10,  # 0.85
-            "next_5_day": 1,  # 0.825
+            "next_2_day": 1,
+            "next_3_day": 1,
+            "next_4_day": 1,
+            "next_5_day": 1,
         },
         {
-            "next_2_day": 8,  # 0.74
-            "next_3_day": 4,  # 0.68
-            "next_4_day": 1,  # 0.61
-            "next_5_day": 5,  # 0.61
+            "next_2_day": 1,
+            "next_3_day": 1,
+            "next_4_day": 1,
+            "next_5_day": 1,
         }
     ]
 
@@ -82,9 +83,10 @@ def idea_07(data):
                 print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
                 print("Accuracy on test set: {:.3f}".format(forest.score(X_test, y_test)))
 
-                all_ts_code = get_result_ts_code_list()
+                # all_ts_code = get_result_ts_code_list()
                 date_now = datetime.datetime.now()
                 date = datetime.datetime(date_now.year, date_now.month, date_now.day)
+                all_ts_code = Result().get_strategy_result_data("a_p_5_p_10", 'B', date)
                 for ts_code in all_ts_code:
                     security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
                     if security_point_data.empty is False:
@@ -137,7 +139,7 @@ def idea_08(data):
         depth_list = []
         training_score_list = []
         test_score_list = []
-        for max_depth in range(1, 31):
+        for max_depth in range(1, 21):
             X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
             forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=max_depth)
             forest.fit(X_train, y_train)
@@ -160,8 +162,8 @@ def idea_08(data):
 
 
 def start(data):
-    # idea_07(data)
-    idea_08(data)
+    idea_07(data)
+    # idea_08(data)
 
 
 if __name__ == "__main__":

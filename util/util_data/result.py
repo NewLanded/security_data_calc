@@ -1,6 +1,6 @@
 import datetime
 
-from util.util_base.db_util import get_connection, update_data
+from util.util_base.db_util import get_connection, update_data, get_single_column
 from util.util_data.security import Security
 
 
@@ -21,7 +21,16 @@ class Result:
                 "date": date, "update_date": datetime.datetime.now()}
         update_data(self._session, sql, args)
 
+    def get_strategy_result_data(self, strategy_code, bs_flag, date):
+        sql = """
+        select a.ts_code from strategy_result a 
+        where strategy_code=:strategy_code and date=:date and bs_flag=:bs_flag
+        """
+        args = {"strategy_code": strategy_code, "bs_flag": bs_flag, "date": date}
+        result = get_single_column(self._session, sql, args)
+        return result
+
 
 if __name__ == "__main__":
     ss = Result()
-    print(ss.insert_strategy_result_data("000001.SZ", "aa", 'B', datetime.datetime(2016, 1, 1)))
+    print(ss.get_strategy_result_data("bbond", 'B', datetime.datetime(2019, 5, 20)))

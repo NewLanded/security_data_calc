@@ -5,7 +5,7 @@ from logging import handlers
 
 import schedule
 
-from strategy.buy import strategy_1
+from strategy.buy import avg_point_5_penetrate_10
 from strategy.buy import bband
 
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
@@ -27,6 +27,13 @@ def job1():
     except Exception as e:
         logger.error('error bband, error = {0}'.format(str(e)))
     logger.info('finished bband')
+
+    logger.info('starting avg_point_5_penetrate_10')
+    try:
+        avg_point_5_penetrate_10.start()
+    except Exception as e:
+        logger.error('error avg_point_5_penetrate_10, error = {0}'.format(str(e)))
+    logger.info('finished avg_point_5_penetrate_10')
 
 
 def job1_task():
