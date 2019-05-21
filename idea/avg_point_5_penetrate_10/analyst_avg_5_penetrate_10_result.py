@@ -35,7 +35,7 @@ def idea_07(data):
             "next_5_day": 1,
         },
         {
-            "next_2_day": 1,
+            "next_2_day": 4,
             "next_3_day": 1,
             "next_4_day": 1,
             "next_5_day": 1,
