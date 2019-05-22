@@ -131,6 +131,11 @@ def idea_08(data):
     for day in target_day_list:
         target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
     data = pd.DataFrame({
+        # "open_previous_close_diff": (data["close"]["previous_1_day"] - data["open"]["next_0_day"]) / percent_series,
+        # "high_low_diff": (data["high"]["next_0_day"] - data["low"]["next_0_day"]) / percent_series,
+        # "open_close_diff": (data["open"]["next_0_day"] - data["close"]["next_0_day"]) / percent_series,
+        # "close_low_diff": (data["close"]["next_0_day"] - data["low"]["next_0_day"]) / percent_series,
+
         "open": data["open"]["next_0_day"] / percent_series,
         "close": data["close"]["next_0_day"] / percent_series,
         "high": data["high"]["next_0_day"] / percent_series,
@@ -142,8 +147,9 @@ def idea_08(data):
         depth_list = []
         training_score_list = []
         test_score_list = []
-        for max_depth in range(1, 31):
-            X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
+        X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
+        print("----------------", len(y_test[np.where(y_test==True)]) / len(y_test), len(y_test[np.where(y_test==True)]))
+        for max_depth in range(1, 21):
             forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=max_depth)
             forest.fit(X_train, y_train)
             print("Accuracy on training set: {:.3f}".format(forest.score(X_train, y_train)))
@@ -261,8 +267,8 @@ def idea_07(data):
 
 
 def start(data):
-    idea_07(data)
-    # idea_08(data)
+    # idea_07(data)
+    idea_08(data)
     # idea_08_2(data)
     # visualization_1(data)
 
