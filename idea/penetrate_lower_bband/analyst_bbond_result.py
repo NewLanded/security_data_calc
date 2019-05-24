@@ -131,10 +131,10 @@ def idea_08(data):
     for day in target_day_list:
         target_data_list.append([day, (data["close"][day] > data["high"]["next_1_day"]).values])
     data = pd.DataFrame({
-        # "open_previous_close_diff": (data["close"]["previous_1_day"] - data["open"]["next_0_day"]) / percent_series,
-        # "high_low_diff": (data["high"]["next_0_day"] - data["low"]["next_0_day"]) / percent_series,
-        # "open_close_diff": (data["open"]["next_0_day"] - data["close"]["next_0_day"]) / percent_series,
-        # "close_low_diff": (data["close"]["next_0_day"] - data["low"]["next_0_day"]) / percent_series,
+        "open_previous_close_diff": (data["close"]["previous_1_day"] - data["open"]["next_0_day"]) / percent_series,
+        "high_low_diff": (data["high"]["next_0_day"] - data["low"]["next_0_day"]) / percent_series,
+        "open_close_diff": (data["open"]["next_0_day"] - data["close"]["next_0_day"]) / percent_series,
+        "close_low_diff": (data["close"]["next_0_day"] - data["low"]["next_0_day"]) / percent_series,
 
         "open": data["open"]["next_0_day"] / percent_series,
         "close": data["close"]["next_0_day"] / percent_series,
@@ -148,7 +148,7 @@ def idea_08(data):
         training_score_list = []
         test_score_list = []
         X_train, X_test, y_train, y_test = train_test_split(data, target_data, random_state=0)
-        print("----------------", len(y_test[np.where(y_test==True)]) / len(y_test), len(y_test[np.where(y_test==True)]))
+        print("True result ratio:", len(y_test[np.where(y_test == True)]) / len(y_test), len(y_test[np.where(y_test == True)]))
         for max_depth in range(1, 21):
             forest = RandomForestClassifier(n_estimators=100, random_state=0, max_depth=max_depth)
             forest.fit(X_train, y_train)
