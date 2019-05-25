@@ -90,12 +90,32 @@ def start(date_now, result):
                 if buy_flag is True:
                     previous_work_day = Date().get_previous_workday(end_date)
                     previous_2_work_day = Date().get_previous_workday(previous_work_day)
-                    security_point_data = SecurityData().get_qfq_security_point_data(ts_code, previous_2_work_day, end_date + datetime.timedelta(days=20))
+
+                    next_0_workday = date_now
+                    next_1_workday = Date().get_next_workday(date_now)
+                    next_2_workday = Date().get_next_workday(next_1_workday)
+                    next_3_workday = Date().get_next_workday(next_2_workday)
+                    next_4_workday = Date().get_next_workday(next_3_workday)
+                    next_5_workday = Date().get_next_workday(next_4_workday)
+
+                    security_point_data = SecurityData().get_qfq_security_point_data(ts_code, previous_2_work_day,
+                                                                                     end_date + datetime.timedelta(days=20))
+                    security_daily_basic_data = SecurityData().get_security_daily_basic_data(ts_code, previous_2_work_day,
+                                                                                             end_date + datetime.timedelta(days=20))
+
+                    security_data = pd.merge(security_point_data, security_daily_basic_data, on=["ts_code", "trade_date"])
+                    security_data.drop(['close_y'], axis=1, inplace=True)
+                    security_data.rename(index=str, columns={"close_x": "close"}, inplace=True)
+
+                    security_data.set_index(security_daily_basic_data["trade_date"], inplace=True)
+                    security_data = security_data.sort_index()
+
                     result_now = pd.DataFrame(
-                        [security_point_data.loc[previous_2_work_day], security_point_data.loc[previous_work_day], security_point_data.iloc[2], security_point_data.iloc[3],
-                         security_point_data.iloc[4],
-                         security_point_data.iloc[5], security_point_data.iloc[6], security_point_data.iloc[7]],
-                        index=[['previous_2_day', 'previous_1_day', 'next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day', 'next_5_day'], [1, 1, 1, 1, 1, 1, 1, 1]])
+                        [security_data.loc[previous_2_work_day], security_data.loc[previous_work_day], security_data.loc[next_0_workday],
+                         security_data.loc[next_1_workday], security_data.loc[next_2_workday], security_data.loc[next_3_workday],
+                         security_data.loc[next_4_workday], security_data.loc[next_5_workday]],
+                        index=[['previous_2_day', 'previous_1_day', 'next_0_day', 'next_1_day', 'next_2_day', 'next_3_day', 'next_4_day',
+                                'next_5_day'], [1, 1, 1, 1, 1, 1, 1, 1]])
                     result_now = result_now.unstack(level=0)
                     result.append(result_now)
 
@@ -106,8 +126,8 @@ def start(date_now, result):
 
 if __name__ == "__main__":
     result = []
-    for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2019, 1, 31)):
-    # for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2016, 5, 5)):
+    # for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2019, 1, 31)):
+    for date in get_date_range(datetime.datetime(2016, 5, 3), datetime.datetime(2016, 5, 8)):
         print(date, datetime.datetime.now())
         with open('./date_now_log', "w") as f:
             f.write(convert_datetime_to_str(date))

@@ -40,4 +40,5 @@ def start(date_now=None):
 
 
 if __name__ == "__main__":
+    # 没屌用
     start(datetime.datetime(2019, 5, 20))
