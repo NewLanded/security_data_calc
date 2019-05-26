@@ -16,18 +16,7 @@ def idea_08(data):
     """
     测试不同max_depth的表现
     """
-    data_low_low = data[
-        (data["open"]["next_1_day"] < data["close"]["next_0_day"]) & (data["close"]["next_1_day"] < data["close"]["next_0_day"])]
-    data_low_high = data[
-        (data["open"]["next_1_day"] < data["close"]["next_0_day"]) & (data["close"]["next_1_day"] > data["close"]["next_0_day"])]
-    data_high_low = data[
-        (data["open"]["next_1_day"] > data["close"]["next_0_day"]) & (data["close"]["next_1_day"] < data["close"]["next_0_day"])]
-    data_high_high = data[
-        (data["open"]["next_1_day"] > data["close"]["next_0_day"]) & (data["close"]["next_1_day"] > data["close"]["next_0_day"])]
-
-    data = data_low_low
-
-    percent_series = data["open"]["next_0_day"] / 100
+    percent_series = data["open"] / 100
 
     target_day_list = ["next_2_day", "next_3_day", "next_4_day", "next_5_day"]
     target_data_list = []
@@ -182,13 +171,11 @@ def idea_07(data):
         print("\n\n\n")
 
 
-def start(data):
-    idea_07(data)
-    # idea_08(data)
+def start():
+    security_data = SecurityData().get_index_point_data('399300.SZ', datetime.datetime(2016, 5, 3), datetime.datetime(2019, 1, 31))
+    # idea_07(security_data)
+    idea_08(security_data)
 
 
 if __name__ == "__main__":
-    result = pd.read_csv('./penetrate_lower_bband.csv', index_col=0, header=[0, 1])
-    # result = result.iloc[0:5]
-    start(result)
-    # print(result[['close', 'open', 'pct_chg']].iloc[1:5])
+    start()
