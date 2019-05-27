@@ -25,7 +25,7 @@ def idea_08(data):
     data_high_high = data[
         (data["open"]["next_1_day"] > data["close"]["next_0_day"]) & (data["close"]["next_1_day"] > data["close"]["next_0_day"])]
 
-    data = data_low_low
+    data = data_high_high
 
     percent_series = data["open"]["next_0_day"] / 100
 
@@ -78,28 +78,28 @@ def idea_07(data):
     """
     max_depth_map_list = [
         {
-            "next_2_day": 1,
-            "next_3_day": 1,
-            "next_4_day": 1,
-            "next_5_day": 1,
+            "next_2_day": 3,
+            "next_3_day": 3,
+            "next_4_day": 3,
+            "next_5_day": 2,
         },
         {
-            "next_2_day": 4,
-            "next_3_day": 1,
-            "next_4_day": 4,
-            "next_5_day": 1,
+            "next_2_day": 2,
+            "next_3_day": 2,
+            "next_4_day": 1,
+            "next_5_day": 8,
         },
         {
-            "next_2_day": 1,
-            "next_3_day": 1,
-            "next_4_day": 1,
-            "next_5_day": 1,
+            "next_2_day": 3,
+            "next_3_day": 3,
+            "next_4_day": 3,
+            "next_5_day": 2,
         },
         {
-            "next_2_day": 1,
-            "next_3_day": 1,
-            "next_4_day": 1,
-            "next_5_day": 3,
+            "next_2_day": 3,
+            "next_3_day": 2,
+            "next_4_day": 5,
+            "next_5_day": 1,
         }
     ]
 
@@ -150,7 +150,6 @@ def idea_07(data):
                 # all_ts_code = get_result_ts_code_list()
                 date_now = datetime.datetime.now()
                 date = datetime.datetime(date_now.year, date_now.month, date_now.day)
-                date = datetime.datetime(date_now.year, date_now.month, 24)
                 all_ts_code = Result().get_strategy_result_data("bbond", 'B', date)
                 for ts_code in all_ts_code:
                     security_point_data = SecurityData().get_security_point_data(ts_code, date, date)
