@@ -20,12 +20,19 @@ logger.addHandler(rf)
 
 
 def job1():
-    logger.info('starting bband')
+    # logger.info('starting bband')
+    # try:
+    #     bband.start()
+    # except Exception as e:
+    #     logger.error('error bband, error = {0}'.format(str(e)))
+    # logger.info('finished bband')
+
+    logger.info('starting sma_sloop')
     try:
         bband.start()
     except Exception as e:
-        logger.error('error bband, error = {0}'.format(str(e)))
-    logger.info('finished bband')
+        logger.error('error sma_sloop, error = {0}'.format(str(e)))
+    logger.info('finished sma_sloop')
 
     # logger.info('starting avg_point_5_penetrate_10')
     # try:

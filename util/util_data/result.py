@@ -30,6 +30,15 @@ class Result:
         result = get_single_column(self._session, sql, args)
         return result
 
+    def get_hold_data(self, strategy_code):
+        sql = """
+        select a.ts_code from hold_data a 
+        where strategy_code=:strategy_code
+        """
+        args = {"strategy_code": strategy_code}
+        result = get_single_column(self._session, sql, args)
+        return result
+
 
 if __name__ == "__main__":
     ss = Result()
