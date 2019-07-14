@@ -6,6 +6,7 @@ from logging import handlers
 import schedule
 
 from strategy.buy import bband
+from strategy.buy import sma_sloop
 
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
 logger.setLevel(logging.INFO)
@@ -29,7 +30,7 @@ def job1():
 
     logger.info('starting sma_sloop')
     try:
-        bband.start()
+        sma_sloop.start()
     except Exception as e:
         logger.error('error sma_sloop, error = {0}'.format(str(e)))
     logger.info('finished sma_sloop')
