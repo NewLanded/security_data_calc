@@ -5,6 +5,7 @@ import datetime
 
 import talib as ta
 
+from util.util_data.date import Date
 from util.util_data.result import Result
 from util.util_data.security import Security
 from util.util_data.security_data import SecurityData
@@ -40,33 +41,32 @@ def sell(data):
 
 
 def start(date_now=None):
-    if date_now is None:
-        date_now = datetime.datetime.now()
-        date_now = datetime.datetime(date_now.year, date_now.month, date_now.day)
+    date_now = datetime.datetime.now() if date_now is None else date_now
+    date_now = datetime.datetime(date_now.year, date_now.month, date_now.day)
 
-    start_date, end_date = date_now - datetime.timedelta(days=50), date_now
+    if Date().is_workday(date_now):
+        start_date, end_date = date_now - datetime.timedelta(days=50), date_now
+        ts_codes = Security().get_efficient_ts_code_by_column_name_list(["normal_status", "tactics_5_status"])
+        for ts_code in ts_codes:
+            try:
+                security_point_data = SecurityData().get_security_point_data(ts_code, start_date, end_date)
+                buy_flag = buy(security_point_data)
 
-    ts_codes = Security().get_efficient_ts_code_by_column_name_list(["normal_status", "tactics_5_status"])
-    for ts_code in ts_codes:
-        try:
-            security_point_data = SecurityData().get_security_point_data(ts_code, start_date, end_date)
-            buy_flag = buy(security_point_data)
+                if buy_flag is True:
+                    Result().insert_strategy_result_data(ts_code, "sma_sloop", "B", date_now)
+            except Exception as e:
+                pass
 
-            if buy_flag is True:
-                Result().insert_strategy_result_data(ts_code, "sma_sloop", "B", date_now)
-        except Exception as e:
-            pass
+        ts_codes = Result().get_hold_data('sma_sloop')
+        for ts_code in ts_codes:
+            try:
+                security_point_data = SecurityData().get_security_point_data(ts_code, start_date, end_date)
+                sell_flag = sell(security_point_data)
 
-    ts_codes = Result().get_hold_data('sma_sloop')
-    for ts_code in ts_codes:
-        try:
-            security_point_data = SecurityData().get_security_point_data(ts_code, start_date, end_date)
-            sell_flag = sell(security_point_data)
-
-            if sell_flag is True:
-                Result().insert_strategy_result_data(ts_code, "sma_sloop", "S", date_now)
-        except Exception as e:
-            pass
+                if sell_flag is True:
+                    Result().insert_strategy_result_data(ts_code, "sma_sloop", "S", date_now)
+            except Exception as e:
+                pass
 
 
 if __name__ == "__main__":
