@@ -46,8 +46,9 @@ def start(date_now=None):
 
     start_date, end_date = date_now - datetime.timedelta(days=50), date_now
 
-    ts_codes = Security().get_efficient_ts_code_by_column_name_list(["normal_status", "tactics_5_status"])
-    for ts_code in ts_codes:
+    # ts_codes = Security().get_efficient_ts_code_by_column_name_list(["normal_status", "tactics_5_status"])
+    # for ts_code in ts_codes:
+    for ts_code in ['600481.SH', '601699.SH', '002061.SZ', '002424.SZ', '600436.SH', '002796.SZ', '600810.SH', '000510.SZ', '601600.SH', '600218.SH', '002414.SZ', '002302.SZ', '000877.SZ', '002451.SZ', '600355.SH', '600760.SH', '600679.SH', '000656.SZ', '600148.SH', '000935.SZ', '002208.SZ', '600516.SH', '002602.SZ', '002696.SZ', '002050.SZ', '000557.SZ', '002460.SZ', '600230.SH', '002877.SZ', '002243.SZ', '600235.SH', '000403.SZ', '000576.SZ', '600997.SH', '600581.SH', '600690.SH', '600507.SH', '600019.SH', '000513.SZ', '002346.SZ', '600966.SH', '000612.SZ', '000966.SZ', '600438.SH', '002382.SZ', '600388.SH', '603993.SH', '601636.SH', '000898.SZ', '601028.SH', '000739.SZ', '002258.SZ', '002760.SZ', '603288.SH', '600782.SH', '600720.SH', '002708.SZ', '603027.SH', '000785.SZ', '600141.SH', '000001.SZ', '600783.SH', '600519.SH', '002072.SZ', '600280.SH', '600874.SH', '603859.SH', '601003.SH', '601918.SH', '000732.SZ', '600083.SH', '601933.SH', '600425.SH', '002034.SZ', '600346.SH', '000528.SZ', '601360.SH', '002679.SZ', '601318.SH', '002124.SZ', '603444.SH', '002606.SZ', '002157.SZ', '600596.SH', '600761.SH', '002408.SZ', '600815.SH', '603180.SH', '000725.SZ', '600641.SH', '000830.SZ', '600128.SH', '002056.SZ', '600196.SH', '600104.SH', '600080.SH', '002545.SZ', '601012.SH', '600776.SH', '000717.SZ', '000690.SZ', '600053.SH', '601100.SH', '002415.SZ']:
         try:
             security_point_data = SecurityData().get_security_point_data(ts_code, start_date, end_date)
             buy_flag = buy(security_point_data)
