@@ -9,7 +9,7 @@ from util.util_data.security_data import SecurityData
 
 
 def buy(data):
-    if data["close"].iloc[-2] < data["close"].iloc[-3] < data["close"].iloc[-4]:
+    if data["close"].iloc[-1] < data["close"].iloc[-2] < data["close"].iloc[-3]:
         buy_flag = True
     else:
         buy_flag = False
