@@ -5,8 +5,7 @@ from logging import handlers
 
 import schedule
 
-from strategy.buy import buy_when_fall
-from strategy.buy import sma_sloop
+from strategy.buy import buy_when_holder_number_fall
 
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
 logger.setLevel(logging.INFO)
@@ -28,19 +27,19 @@ def job1():
     #     logger.error('error bband, error = {0}'.format(str(e)))
     # logger.info('finished bband')
 
-    logger.info('starting sma_sloop')
-    try:
-        sma_sloop.start()
-    except Exception as e:
-        logger.error('error sma_sloop, error = {0}'.format(str(e)))
-    logger.info('finished sma_sloop')
-
-    logger.info('starting buy_when_fall')
-    try:
-        buy_when_fall.start()
-    except Exception as e:
-        logger.error('error buy_when_fall, error = {0}'.format(str(e)))
-    logger.info('finished buy_when_fall')
+    # logger.info('starting sma_sloop')
+    # try:
+    #     sma_sloop.start()
+    # except Exception as e:
+    #     logger.error('error sma_sloop, error = {0}'.format(str(e)))
+    # logger.info('finished sma_sloop')
+    #
+    # logger.info('starting buy_when_fall')
+    # try:
+    #     buy_when_fall.start()
+    # except Exception as e:
+    #     logger.error('error buy_when_fall, error = {0}'.format(str(e)))
+    # logger.info('finished buy_when_fall')
 
     # logger.info('starting avg_point_5_penetrate_10')
     # try:
@@ -48,6 +47,13 @@ def job1():
     # except Exception as e:
     #     logger.error('error avg_point_5_penetrate_10, error = {0}'.format(str(e)))
     # logger.info('finished avg_point_5_penetrate_10')
+
+    logger.info('starting buy_when_holder_number_fall')
+    try:
+        buy_when_holder_number_fall.start()
+    except Exception as e:
+        logger.error('error buy_when_holder_number_fall, error = {0}'.format(str(e)))
+    logger.info('finished buy_when_holder_number_fall')
 
 
 def job1_task():
