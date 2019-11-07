@@ -26,6 +26,14 @@ class Date:
         workday_flag = get_single_value(self._session, sql, args)
         return workday_flag
 
+    def get_previous_workday_with_today(self, date):
+        sql = """
+        select max(date) from sec_date_info where date <= :date and is_workday_flag=1
+        """
+        args = {"date": date}
+        workday_flag = get_single_value(self._session, sql, args)
+        return workday_flag
+
     def get_next_workday(self, date):
         sql = """
         select min(date) from sec_date_info where date > :date and is_workday_flag=1
