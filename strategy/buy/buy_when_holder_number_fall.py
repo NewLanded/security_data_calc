@@ -48,7 +48,8 @@ def buy(security_point_data, holder_number_data):
                 # if security_point_data["close"].iloc[-1] > holder_number_date_point['close'].iloc[-1]:  没道理啊, 不一定披露日就是最低的点位
                 if holder_number_date_point['close'].iloc[-1] < holder_number_date_point['close'][-2] < holder_number_date_point['close'][-3] < \
                         holder_number_date_point['close'][-4]:
-                    return True
+                    if holder_number_date_point['close'].iloc[-1] >= 8:
+                        return True
 
     return False
 
