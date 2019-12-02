@@ -12,7 +12,11 @@ class Result:
         self._session.close()
 
     def insert_strategy_result_data(self, ts_code, strategy_code, bs_flag, date):
-        code = Security().get_code_info_by_ts_code(ts_code)["code"]
+        try:
+            code = Security().get_code_info_by_ts_code(ts_code)["code"]
+        except Exception as e:
+            code = ts_code
+
         sql = """
         insert into strategy_result (ts_code, code, strategy_code, bs_flag, date, update_date) 
         values(:ts_code, :code, :strategy_code, :bs_flag, :date, :update_date)

@@ -1,5 +1,6 @@
 import datetime
 
+from util.util_base.constant import symbol_endwith_L, manual_code_list
 from util.util_base.db_util import get_connection
 from util.util_base.db_util import get_multi_data
 
@@ -18,20 +19,30 @@ class MarketInfo:
         args = {"trade_date": trade_date}
         result = get_multi_data(self._session, sql, args)
 
-        code_month_list = ['01', '05', '09']
-        result = [i[1] for i in result if i[1].split('.')[0][-2:] in code_month_list]
-        result = list(set(result))
+        result_new = []
+        for row in result:
+            symbol = row[0].split('.')[0]
+
+            if symbol.endswith('L'):
+                if symbol in symbol_endwith_L:
+                    result_new.append(row[1])
+            elif symbol.endswith('L'):
+                pass
+            else:
+                result_new.append(row[1])
+
+        result = list(set(result_new))
+        result.sort()
 
         return result
 
     def get_future_main_code_filter_by_manual(self, trade_date):
         main_code_list_ori = self.get_future_main_code(trade_date)
 
-        code_start_str_list = ['CF', 'OI', 'FG', 'RM', 'CY', 'AP', 'SR', 'JD', 'C', 'L', 'M', 'P', 'Y', 'HC', 'RB']
         main_code_list = []
         for code in main_code_list_ori:
             code_symbol = code.split('.')[0][:-4]
-            if code_symbol in code_start_str_list:
+            if code_symbol in manual_code_list:
                 main_code_list.append(code)
 
         main_code_list = list(set(main_code_list))
@@ -42,6 +53,7 @@ class MarketInfo:
 
 if __name__ == "__main__":
     ss = MarketInfo()
-    ff = ss.get_future_main_code_filter_by_manual(datetime.datetime(2019, 11, 21))
+    ff = ss.get_future_main_code_filter_by_manual(datetime.datetime(2019, 11, 28))
     print(ff)
+    print(len(ff))
     aa = 1

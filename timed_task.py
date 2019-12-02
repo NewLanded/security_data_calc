@@ -1,11 +1,10 @@
 import logging
-import threading
 import time
 from logging import handlers
 
 import schedule
 
-from strategy.buy import buy_when_holder_number_fall
+from strategy.buy import buy_when_holder_number_fall, future_bs_when_trend_start
 
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
 logger.setLevel(logging.INFO)
@@ -48,6 +47,13 @@ def job1():
     #     logger.error('error avg_point_5_penetrate_10, error = {0}'.format(str(e)))
     # logger.info('finished avg_point_5_penetrate_10')
 
+    logger.info('starting future_bs_when_trend_start')
+    try:
+        future_bs_when_trend_start.start()
+    except Exception as e:
+        logger.error('error future_bs_when_trend_start, error = {0}'.format(str(e)))
+    logger.info('finished future_bs_when_trend_start')
+
     logger.info('starting buy_when_holder_number_fall')
     try:
         buy_when_holder_number_fall.start()
@@ -56,12 +62,8 @@ def job1():
     logger.info('finished buy_when_holder_number_fall')
 
 
-def job1_task():
-    threading.Thread(target=job1).start()
-
-
 def run():
-    schedule.every().day.at("19:45").do(job1_task)
+    schedule.every().day.at("19:20").do(job1)
 
 
 if __name__ == "__main__":
