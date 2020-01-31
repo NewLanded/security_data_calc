@@ -11,44 +11,53 @@ from util.util_data.security_data import SecurityData
 
 
 def buy(security_point_data):
+    ema_data_5 = ta.MA(security_point_data["close"], timeperiod=5, matype=1)
     sma_data_5 = ta.MA(security_point_data["close"], timeperiod=5, matype=0)
     sma_data_30 = ta.MA(security_point_data["close"], timeperiod=30, matype=0)
 
     sma_5_t, sma_5_t_1, sma_5_t_2 = sma_data_5.iloc[-1], sma_data_5.iloc[-2], sma_data_5.iloc[-3]
+    ema_5_t, ema_5_t_1, ema_5_t_2 = ema_data_5.iloc[-1], ema_data_5.iloc[-2], ema_data_5.iloc[-3]
     sma_30_t, sma_30_t_1, sma_30_t_2 = sma_data_30.iloc[-1], sma_data_30.iloc[-2], sma_data_30.iloc[-3]
 
     sma_5_slope_symbol_t = 0b100 if sma_5_t - sma_5_t_1 > 0 else 0b010 if sma_5_t - sma_5_t_1 < 0 else 0b001
+    ema_5_slope_symbol_t = 0b100 if ema_5_t - ema_5_t_1 > 0 else 0b010 if ema_5_t - ema_5_t_1 < 0 else 0b001
     sma_30_slope_symbol_t = 0b100 if sma_30_t - sma_30_t_1 > 0 else 0b010 if sma_30_t - sma_30_t_1 < 0 else 0b001
 
     sma_5_slope_symbol_t_1 = 0b100 if sma_5_t_1 - sma_5_t_2 > 0 else 0b010 if sma_5_t_1 - sma_5_t_2 < 0 else 0b001
+    ema_5_slope_symbol_t_1 = 0b100 if ema_5_t_1 - ema_5_t_2 > 0 else 0b010 if ema_5_t_1 - ema_5_t_2 < 0 else 0b001
     sma_30_slope_symbol_t_1 = 0b100 if sma_30_t_1 - sma_30_t_2 > 0 else 0b010 if sma_30_t_1 - sma_30_t_2 < 0 else 0b001
 
-    if sma_5_slope_symbol_t != 0b001 and sma_30_slope_symbol_t != 0b001:
+    if sma_5_slope_symbol_t != 0b001 and sma_30_slope_symbol_t != 0b001 and ema_5_slope_symbol_t != 0b001:
         if not sma_5_slope_symbol_t_1 & sma_30_slope_symbol_t_1:  # 昨天的方向不同
             if sma_5_slope_symbol_t & sma_30_slope_symbol_t:  # 今天的方向相同
                 return True
+
+        if sma_5_slope_symbol_t_1 & sma_30_slope_symbol_t_1:  # 昨天的方向相同
+            if sma_5_slope_symbol_t & sma_30_slope_symbol_t:  # 今天的方向相同
+                if not ema_5_slope_symbol_t_1 & sma_30_slope_symbol_t_1:  # 昨天的方向不同
+                    if ema_5_slope_symbol_t & sma_30_slope_symbol_t:  # 今天的方向相同
+                        return True
 
     return False
 
 
 def sell(security_point_data):
-    sma_data_5 = ta.MA(security_point_data["close"], timeperiod=5, matype=0)
+    ema_data_5 = ta.MA(security_point_data["close"], timeperiod=5, matype=1)
     sma_data_30 = ta.MA(security_point_data["close"], timeperiod=30, matype=0)
 
-    sma_5_t, sma_5_t_1, sma_5_t_2 = sma_data_5.iloc[-1], sma_data_5.iloc[-2], sma_data_5.iloc[-3]
+    ema_5_t, ema_5_t_1, ema_5_t_2 = ema_data_5.iloc[-1], ema_data_5.iloc[-2], ema_data_5.iloc[-3]
     sma_30_t, sma_30_t_1, sma_30_t_2 = sma_data_30.iloc[-1], sma_data_30.iloc[-2], sma_data_30.iloc[-3]
 
-    sma_5_slope_symbol_t = 0b100 if sma_5_t - sma_5_t_1 > 0 else 0b010 if sma_5_t - sma_5_t_1 < 0 else 0b001
+    ema_5_slope_symbol_t = 0b100 if ema_5_t - ema_5_t_1 > 0 else 0b010 if ema_5_t - ema_5_t_1 < 0 else 0b001
     sma_30_slope_symbol_t = 0b100 if sma_30_t - sma_30_t_1 > 0 else 0b010 if sma_30_t - sma_30_t_1 < 0 else 0b001
 
-    sma_5_slope_symbol_t_1 = 0b100 if sma_5_t_1 - sma_5_t_2 > 0 else 0b010 if sma_5_t_1 - sma_5_t_2 < 0 else 0b001
+    ema_5_slope_symbol_t_1 = 0b100 if ema_5_t_1 - ema_5_t_2 > 0 else 0b010 if ema_5_t_1 - ema_5_t_2 < 0 else 0b001
     sma_30_slope_symbol_t_1 = 0b100 if sma_30_t_1 - sma_30_t_2 > 0 else 0b010 if sma_30_t_1 - sma_30_t_2 < 0 else 0b001
 
-    if sma_5_slope_symbol_t_1 & sma_30_slope_symbol_t_1:  # 昨天方向相同
-        if not sma_5_slope_symbol_t & sma_30_slope_symbol_t:  # 今天方向不相同
-            return True
+    if not ema_5_slope_symbol_t & ema_5_slope_symbol_t_1:  # 5日线方向变化的时候, 平仓
+        return True
 
-    if not sma_5_slope_symbol_t & sma_5_slope_symbol_t_1:  # 5日线方向变化的时候, 平仓
+    if not sma_30_slope_symbol_t & sma_30_slope_symbol_t_1:  # 30日线方向变化的时候, 平仓
         return True
 
     return False
@@ -89,7 +98,7 @@ def start(date_now=None):
 
 
 if __name__ == "__main__":
-    start_date, end_date = datetime.datetime(2019, 11, 28), datetime.datetime(2019, 11, 28)
+    start_date, end_date = datetime.datetime(2019, 9, 1), datetime.datetime(2019, 12, 31)
     for date in get_date_range(start_date, end_date):
         print(date)
         start(date)
