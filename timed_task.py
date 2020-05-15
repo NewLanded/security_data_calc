@@ -63,7 +63,7 @@ def job1():
 
 
 def run():
-    schedule.every().day.at("19:50").do(job1)
+    schedule.every().day.at("20:30").do(job1)
 
 
 if __name__ == "__main__":
