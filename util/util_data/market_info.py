@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from util.util_base.constant import symbol_endwith_L, manual_code_list
 from util.util_base.db_util import get_connection
@@ -21,15 +22,19 @@ class MarketInfo:
 
         result_new = []
         for row in result:
-            symbol = row[0].split('.')[0]
+            # symbol = row[0].split('.')[0]
+            symbol_ts, symbol_main = row[0].split('.')[0], row[1].split('.')[0]
 
-            if symbol.endswith('L'):
-                if symbol in symbol_endwith_L:
-                    result_new.append(row[1])
-            elif symbol.endswith('L'):
-                pass
-            else:
+            if re.match(r'[A-Z]*', symbol_ts).group(0) == re.match(r'[A-Z]*', symbol_main).group(0):
                 result_new.append(row[1])
+
+            # if symbol.endswith('L'):
+            #     if symbol in symbol_endwith_L:
+            #         result_new.append(row[1])
+            # elif symbol.endswith('L'):
+            #     pass
+            # else:
+            #     result_new.append(row[1])
 
         result = list(set(result_new))
         result.sort()

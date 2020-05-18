@@ -98,7 +98,8 @@ def start(date_now=None):
 
 
 if __name__ == "__main__":
-    start_date, end_date = datetime.datetime(2019, 9, 1), datetime.datetime(2019, 12, 31)
-    for date in get_date_range(start_date, end_date):
-        print(date)
-        start(date)
+    # start_date, end_date = datetime.datetime(2019, 9, 1), datetime.datetime(2019, 12, 31)
+    # for date in get_date_range(start_date, end_date):
+    #     print(date)
+    #     start(date)
+    start()
