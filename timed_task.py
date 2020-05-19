@@ -18,7 +18,7 @@ rf.setFormatter(formatter)
 logger.addHandler(rf)
 
 
-def job1():
+def stock_job():
     # logger.info('starting bband')
     # try:
     #     bband.start()
@@ -47,13 +47,6 @@ def job1():
     #     logger.error('error avg_point_5_penetrate_10, error = {0}'.format(str(e)))
     # logger.info('finished avg_point_5_penetrate_10')
 
-    logger.info('starting future_bs_when_trend_start')
-    try:
-        future_bs_when_trend_start.start()
-    except Exception as e:
-        logger.error('error future_bs_when_trend_start, error = {0}'.format(str(e)))
-    logger.info('finished future_bs_when_trend_start')
-
     logger.info('starting buy_when_holder_number_fall')
     try:
         buy_when_holder_number_fall.start()
@@ -62,8 +55,18 @@ def job1():
     logger.info('finished buy_when_holder_number_fall')
 
 
+def future_job():
+    logger.info('starting future_bs_when_trend_start')
+    try:
+        future_bs_when_trend_start.start()
+    except Exception as e:
+        logger.error('error future_bs_when_trend_start, error = {0}'.format(str(e)))
+    logger.info('finished future_bs_when_trend_start')
+
+
 def run():
-    schedule.every().day.at("20:30").do(job1)
+    schedule.every().day.at("19:40").do(stock_job)
+    schedule.every().day.at("21:20").do(future_job)
 
 
 if __name__ == "__main__":
