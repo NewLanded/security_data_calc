@@ -4,7 +4,7 @@ from logging import handlers
 
 import schedule
 
-from strategy.buy import buy_when_holder_number_fall, future_bs_when_trend_start
+from strategy.buy import buy_when_holder_number_fall, future_bs_when_trend_start, buy_when_30_days_change_to_up
 
 logger = logging.getLogger('/home/stock/app/security_data_calc/timed_task.log')
 logger.setLevel(logging.INFO)
@@ -19,40 +19,19 @@ logger.addHandler(rf)
 
 
 def stock_job():
-    # logger.info('starting bband')
-    # try:
-    #     bband.start()
-    # except Exception as e:
-    #     logger.error('error bband, error = {0}'.format(str(e)))
-    # logger.info('finished bband')
-
-    # logger.info('starting sma_sloop')
-    # try:
-    #     sma_sloop.start()
-    # except Exception as e:
-    #     logger.error('error sma_sloop, error = {0}'.format(str(e)))
-    # logger.info('finished sma_sloop')
-    #
-    # logger.info('starting buy_when_fall')
-    # try:
-    #     buy_when_fall.start()
-    # except Exception as e:
-    #     logger.error('error buy_when_fall, error = {0}'.format(str(e)))
-    # logger.info('finished buy_when_fall')
-
-    # logger.info('starting avg_point_5_penetrate_10')
-    # try:
-    #     avg_point_5_penetrate_10.start()
-    # except Exception as e:
-    #     logger.error('error avg_point_5_penetrate_10, error = {0}'.format(str(e)))
-    # logger.info('finished avg_point_5_penetrate_10')
-
     logger.info('starting buy_when_holder_number_fall')
     try:
         buy_when_holder_number_fall.start()
     except Exception as e:
         logger.error('error buy_when_holder_number_fall, error = {0}'.format(str(e)))
     logger.info('finished buy_when_holder_number_fall')
+
+    logger.info('starting buy_when_30_days_change_to_up')
+    try:
+        buy_when_30_days_change_to_up.start()
+    except Exception as e:
+        logger.error('error buy_when_30_days_change_to_up, error = {0}'.format(str(e)))
+    logger.info('finished buy_when_30_days_change_to_up')
 
 
 def future_job():
